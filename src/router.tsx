@@ -6,22 +6,29 @@ import {
   createRoute,
   RouterProvider,
   Link,
-  Outlet
+  Outlet,
+  useLocation
 } from "@tanstack/react-router";
 import Home from "./pages/Home";
 import CampaignsList from "./pages/CampaignsList";
 import CampaignPage from "./pages/CampaignPage";
+import FoundationNewCampaign from "./pages/FoundationNewCampaign";
 
 // Root layout route
 const RootRoute = createRootRoute({
   component: function RootLayout() {
+    const location = useLocation();
+    const isHomePage = location.pathname === "/";
+    
     return (
       <div className="h-screen overflow-hidden">
-        <nav style={{ padding: "1rem", borderBottom: "1px solid #ccc" }}>
-          <Link to="/">Home</Link>{" | "}
-          <Link to="/campaigns">Campaigns List</Link>{" | "}
-          <Link to="/campaigns/blue">CampaignPage “blue”</Link>
-        </nav>
+        {!isHomePage && (
+          <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] flex flex-row gap-8 items-center text-sm pl-12 py-4">
+            <Link to="/">Home</Link>
+            <Link to="/campaigns">Campaigns List</Link>
+            <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
+          </nav>
+        )}
         <main style={{ overflow: "auto" }}>
           <Outlet />
         </main>
@@ -37,25 +44,23 @@ const HomeRoute = createRoute({
   component: function HomeWrapper() {
     return (
       <>
-        <h1>Home Route</h1>
         <Home />
       </>
     );
   },
 });
 
-// const FoundationNewCampaignRoute = createRoute({
-//   getParentRoute: () => RootRoute,
-//   path: "/",  // exact root
-//   component: function FoundationNewCampaignWrapper() {
-//     return (
-//       <>
-//         <h1>Home Route</h1>
-//         <Home />
-//       </>
-//     );
-//   },
-// });
+const FoundationNewCampaignRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/foundation-new-campaign",  // exact root
+  component: function FoundationNewCampaignWrapper() {
+    return (
+      <>
+        <FoundationNewCampaign />
+      </>
+    );
+  },
+});
 
 // Campaigns route layout (renders nested routes)
 const CampaignsRoute = createRoute({
@@ -96,6 +101,7 @@ const routeTree = RootRoute.addChildren([
     CampaignsIndexRoute,
     CampaignPageRoute,
   ]),
+  FoundationNewCampaignRoute,
 ]);
 
 // Create router
