@@ -1,7 +1,11 @@
 // TradingViewWidget.jsx
-import React, { useEffect, useRef, memo } from 'react';
+import { useEffect, useRef, memo } from 'react';
 
-function TradingViewWidget() {
+interface TradingViewWidgetProps {
+  token: string;
+}
+
+function TradingViewWidget({ token }: TradingViewWidgetProps) {
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(
@@ -43,7 +47,7 @@ function TradingViewWidget() {
           "changeMode": "price-and-percent",
           "symbols": [
             [
-              "BITHUMB:BLUEKRW|1D|KRW"
+              "BITHUMB:${token}KRW|1D|KRW"
             ]
           ],
           "dateRanges": [
@@ -77,7 +81,7 @@ function TradingViewWidget() {
         }
       };
     },
-    []
+    [token]
   );
 
   return (
