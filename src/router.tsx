@@ -30,7 +30,8 @@ const RootRoute = createRootRoute({
               <Link to="/campaigns">Campaigns List</Link>
               <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
             </div>
-            <div>
+            <div> 
+              {/* YAKOV LOOK HERE */}
               <Button>Connect Wallet</Button>
             </div>
           </nav>
