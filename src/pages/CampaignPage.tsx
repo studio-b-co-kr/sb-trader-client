@@ -1,3 +1,5 @@
+import logoBlue from "@/assets/logo-blue.png"
+
 import {
   Card,
   CardAction,
@@ -56,18 +58,36 @@ export default function CampaignPage({ campaignId, campaignToken }: CampaignPage
   return (
     <div className="container mx-auto max-w-9xl">
       <div className="flex flex-row justify-stretch gap-0 min-h-screen">
-        <div className="flex-grow min-h-screen border-r border-[#B6A2B7]/20 pr-6">
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold mb-2">Campaign {campaignId}</h1>
-            <p className="text-gray-600">Campaign details and management</p>
+        <div className="flex-grow min-h-screen border-r border-[#B6A2B7]/20 pr-6 pt-6">
+          <div className="mb-6 flex flex-row gap-8 items-center">
+            <h1 className="text-3xl flex flex-row gap-1">
+              <img src={logoBlue} alt="Logo" className="w-8 h-8" />
+              <span>{campaignToken}</span>
+              <span className="text-[#EE82DA] uppercase font-bold">{campaignToken}</span>
+            </h1>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Current Price</div>
+              <div className="text-lg number-font">$0.001728</div>
+            </div>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Volume</div>
+              <div className="text-lg number-font">$8.55M</div>
+            </div>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Exchange</div>
+              <div className="text-lg number-font">$10,000</div>
+            </div>
           </div>
 
           <Card className="w-full h-[560px] dark rounded-[2px]">
-            <CardHeader className="color-[#FAFAFA] text-2xl number-font">
-              asdfasdf
-            </CardHeader>
-            <div className="color-[#FAFAFA] text-lg number-font pl-6">
-              afffff
+            <div>
+              <div className="text-[#FAFAFA] text-4xl number-font pl-6 mb-2">
+                $0.0017281
+              </div>
+              <div className="text-[#EE82DA] text-normal number-font pl-6 flex flex-row gap-1">
+                <div>+$0.000011232</div>
+                <div>(+1.23%)</div>
+              </div>
             </div>
             <TradingViewWidget />
           </Card>

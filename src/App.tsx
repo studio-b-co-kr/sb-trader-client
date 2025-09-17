@@ -38,7 +38,7 @@ function App() {
     const slug = path.slice('/campaign/'.length)
     const campaignId = slug.length > 0 ? decodeURIComponent(slug) : 'unknown'
 
-    return <CampaignPage campaignId={campaignId} />
+    return <CampaignPage campaignId={campaignId} campaignToken="Blue" />
   }
 
   return (
