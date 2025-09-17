@@ -23,10 +23,10 @@ const RootRoute = createRootRoute({
     return (
       <div className="h-screen overflow-hidden">
         {!isHomePage && (
-          <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] flex flex-row gap-8 items-center text-sm pl-12 py-4">
-            <Link to="/">Home</Link>
-            <Link to="/campaigns">Campaigns List</Link>
+          <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] flex flex-row gap-8 items-center text-sm pl-8 py-4">
+            <Link to="/campaigns">Campaigns</Link>
             <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
+            {/* <Link to="/">Home</Link> */}
           </nav>
         )}
         <main style={{ overflow: "auto" }}>

@@ -1,5 +1,8 @@
 import logoBlue from "@/assets/logo-blue.png"
-import { Link } from "@tanstack/react-router";
+import { 
+  Link,
+  useNavigate,
+ } from "@tanstack/react-router";
 
 import {
   Card,
@@ -11,10 +14,11 @@ import {
 
 export default function CampaignsList() {
   const campaigns = [
-    { id: "abc", name: "Campaign A" },
-    { id: "xyz", name: "Campaign X" },
+    { id: "blue", name: "Campaign A" },
+    { id: "blue", name: "Campaign X" },
   ];
 
+  const navigate = useNavigate();
 
 
   return (
@@ -23,20 +27,14 @@ export default function CampaignsList() {
         <h1 className="text-3xl text-[#FAFAFA] mb-2">Campaigns</h1>
         <p className="text-[#FAFAFA]/60">Active trading campaigns</p>
       </div>
-      <ul className="mb-6">
-        {campaigns.map((c) => (
-          <li key={c.id}>
-            <Link
-              to="/campaigns/$campaignId"
-              params={{ campaignId: c.id }}
-            >
-              {c.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="dark rounded-[2px] overflow-hidden hover:border-[#EE82DA]/40 transition-colors cursor-pointer">
+      {campaigns.map((c) => (
+        <Card 
+          className="dark rounded-[2px] overflow-hidden hover:border-[#EE82DA]/40 transition-colors cursor-pointer"
+          onClick={() => {
+            navigate({to: "/campaigns/$campaignId", params: {campaignId: c.id}});
+          }}
+        >
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2 mb-2">
               <img src={logoBlue} alt="Logo" className="w-6 h-6" />
@@ -85,6 +83,7 @@ export default function CampaignsList() {
             </div>
           </CardContent>
         </Card>
+      ))}
       </div>
     </div>
   )

@@ -2,12 +2,7 @@ import logoBlue from "@/assets/logo-blue.png"
 
 import {
   Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card"
 
 import {
@@ -19,7 +14,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
@@ -54,6 +48,7 @@ interface CampaignPageProps {
 }
 
 const campaignToken = "Blue"
+const campaignName = "Sept 25 Campaign"
 
 export default function CampaignPage({ campaignId }: CampaignPageProps) {
   return (
@@ -61,9 +56,9 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
       <div className="flex flex-row justify-stretch gap-0 min-h-screen">
         <div className="flex-grow min-h-screen border-r border-[#B6A2B7]/20 pr-6 pt-6">
           <div className="mb-6 flex flex-row gap-8 items-center">
-            <h1 className="text-3xl flex flex-row gap-1">
+            <h1 className="text-xl flex flex-row gap-1">
               <img src={logoBlue} alt="Logo" className="w-8 h-8" />
-              <span className="lowercase">{campaignToken}</span>
+              <span className="lowercase">{campaignName}</span>
               <span className="text-[#EE82DA] uppercase font-bold">{campaignToken}</span>
             </h1>
             <div className="flex flex-col gap-1 px-6">
