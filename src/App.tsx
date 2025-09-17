@@ -1,17 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import CampaignBlankPage from './pages/CampaignBlankPage'
 import CampaignPage from './pages/CampaignPage'
+import CampaignsList from './pages/CampaignsList'
 
 function App() {
   const [path, setPath] = useState(() => window.location.pathname)
@@ -25,48 +17,33 @@ function App() {
     return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
-  const navigate = (to: string) => {
-    if (to === window.location.pathname) {
-      return
+  const segments = path
+    .split('/')
+    .filter(Boolean)
+
+  if (segments.length === 0) {
+    return <CampaignsList />
+  }
+
+  const [rootSegment, ...rest] = segments
+
+  if (rootSegment === 'campaigns') {
+    return <CampaignsList />
+  }
+
+  if (rootSegment === 'campaign') {
+    const slug = rest[0]
+
+    if (!slug) {
+      return <CampaignBlankPage campaignId="unknown" />
     }
 
-    window.history.pushState({}, '', to)
-    setPath(to)
+    const campaignId = decodeURIComponent(slug)
+
+    return <CampaignPage campaignId={campaignId} campaignToken={campaignId} />
   }
 
-  if (path.startsWith('/campaign/')) {
-    const slug = path.slice('/campaign/'.length)
-    const campaignId = slug.length > 0 ? decodeURIComponent(slug) : 'unknown'
-
-    return <CampaignPage campaignId={campaignId} campaignToken="Blue" />
-  }
-
-  return (
-    <>
-      <div className="text-3xl font-bold underline">
-        afasdfasdfasdf
-      </div>
-      <button
-        className="mt-4 rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
-        onClick={() => navigate('/campaign/example-campaign')}
-      >
-        Go to Example Campaign
-      </button>
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-          <CardDescription>Card Description</CardDescription>
-          <CardAction>Card Action</CardAction>
-        </CardHeader>
-        <CardContent>
-          <p>Card Content</p>
-        </CardContent>
-        <CardFooter>
-          <p>Card Footer</p>
-        </CardFooter>
-      </Card>
-    </>
-  )
+  return <CampaignBlankPage campaignId="unknown" />
 }
 
 export default App
