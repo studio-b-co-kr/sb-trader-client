@@ -1,4 +1,5 @@
 import logoBlue from "@/assets/logo-blue.png"
+import { Link } from "@tanstack/react-router";
 
 import {
   Card,
@@ -9,13 +10,31 @@ import {
 } from "@/components/ui/card"
 
 export default function CampaignsList() {
+  const campaigns = [
+    { id: "abc", name: "Campaign A" },
+    { id: "xyz", name: "Campaign X" },
+  ];
+
+
+
   return (
     <div className="container mx-auto max-w-9xl p-6">
       <div className="mb-6">
         <h1 className="text-3xl text-[#FAFAFA] mb-2">Campaigns</h1>
         <p className="text-[#FAFAFA]/60">Active trading campaigns</p>
       </div>
-
+      <ul className="mb-6">
+        {campaigns.map((c) => (
+          <li key={c.id}>
+            <Link
+              to="/campaigns/$campaignId"
+              params={{ campaignId: c.id }}
+            >
+              {c.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Card className="dark rounded-[2px] overflow-hidden hover:border-[#EE82DA]/40 transition-colors cursor-pointer">
           <CardHeader className="pb-3">

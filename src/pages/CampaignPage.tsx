@@ -51,10 +51,11 @@ import TradingViewWidget from "@/components/chart/BlueChart"
 
 interface CampaignPageProps {
   campaignId: string
-  campaignToken: string
 }
 
-export default function CampaignPage({ campaignId, campaignToken }: CampaignPageProps) {
+const campaignToken = "Blue"
+
+export default function CampaignPage({ campaignId }: CampaignPageProps) {
   return (
     <div className="container mx-auto max-w-9xl">
       <div className="flex flex-row justify-stretch gap-0 min-h-screen">
