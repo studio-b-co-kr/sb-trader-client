@@ -62,7 +62,7 @@ export default function CampaignPage({ campaignId, campaignToken }: CampaignPage
           <div className="mb-6 flex flex-row gap-8 items-center">
             <h1 className="text-3xl flex flex-row gap-1">
               <img src={logoBlue} alt="Logo" className="w-8 h-8" />
-              <span>{campaignToken}</span>
+              <span className="lowercase">{campaignToken}</span>
               <span className="text-[#EE82DA] uppercase font-bold">{campaignToken}</span>
             </h1>
             <div className="flex flex-col gap-1 px-6">
