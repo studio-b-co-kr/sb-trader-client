@@ -8,6 +8,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+
 import TradingViewWidget from "@/components/chart/BlueChart"
 
 interface CampaignPageProps {
@@ -61,14 +68,28 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
               My Summary
             </CardHeader>
             <div className="flex flex-col gap-1 px-6">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Eligility for Prize Pool</div>
               <div className="text-normal number-font">$10,000</div>
+            </div>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Total Executed Trade Vol</div>
+              <div className="text-normal number-font">$850</div>
+            </div>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Outstanding Orders</div>
+              <div className="text-normal number-font">$250</div>
             </div>
           </Card>
           <Card className="dark rounded-[2px] overflow-hidden">
             <CardHeader className="color-[#FAFAFA]">
               New Trade
             </CardHeader>
+            <Tabs defaultValue="buy" className="px-6">
+              <TabsList>
+                <TabsTrigger value="buy">Buy</TabsTrigger>
+                <TabsTrigger value="sell">Sell</TabsTrigger>
+              </TabsList>
+            </Tabs>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
               <div className="text-normal number-font">$10,000</div>
