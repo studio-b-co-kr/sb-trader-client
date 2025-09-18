@@ -9,11 +9,12 @@ import {
   Outlet,
   useLocation
 } from "@tanstack/react-router";
-import { Button } from "./components/ui/button";
 import Home from "./pages/Home";
 import CampaignsList from "./pages/CampaignsList";
 import CampaignPage from "./pages/CampaignPage";
 import FoundationNewCampaign from "./pages/FoundationNewCampaign";
+import TradesPage from "./pages/TradesPage";
+import { ConnectButton } from "@mysten/dapp-kit";
 
 // Root layout route
 const RootRoute = createRootRoute({
@@ -29,10 +30,10 @@ const RootRoute = createRootRoute({
               <Link to="/">Home</Link>
               <Link to="/campaigns">Campaigns List</Link>
               <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
+              <Link to="/trades">Trades</Link>
             </div>
             <div> 
-              {/* YAKOV LOOK HERE */}
-              <Button>Connect Wallet</Button>
+              <ConnectButton />
             </div>
           </nav>
         )}
@@ -64,6 +65,18 @@ const FoundationNewCampaignRoute = createRoute({
     return (
       <>
         <FoundationNewCampaign />
+      </>
+    );
+  },
+});
+
+const TradesPageRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/trades",  // exact root
+  component: function FoundationNewCampaignWrapper() {
+    return (
+      <>
+        <TradesPage />
       </>
     );
   },
@@ -109,6 +122,7 @@ const routeTree = RootRoute.addChildren([
     CampaignPageRoute,
   ]),
   FoundationNewCampaignRoute,
+  TradesPageRoute,
 ]);
 
 // Create router
