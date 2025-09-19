@@ -20,3 +20,25 @@ export function useCampaignMySummary(campaignId: string) {
     gcTime: 5 * 60 * 1000, // 5 minutes
   });
 }
+
+export function useCampaignMyOpenOrders(campaignId: string) {
+  return useQuery({
+    queryKey: ['my-open-orders', campaignId],
+    queryFn: () => campaignApi.getCampaignMyOpenOrders(campaignId),
+    enabled: !!campaignId,
+    staleTime: 2 * 60 * 1000,
+    // staleTime: 0, // need to refresh
+    // refetchInterval: 3000, // 3초마다 polling
+  });
+}
+
+export function useCampaignMyExecutedOrders(campaignId: string) {
+  return useQuery({
+    queryKey: ['my-executed-orders', campaignId],
+    queryFn: () => campaignApi.getCampaignMyExecutedOrders(campaignId),
+    enabled: !!campaignId,
+    staleTime: 2 * 60 * 1000,
+    // staleTime: 0, // need to refresh
+    // refetchInterval: 3000, // 3초마다 polling
+  });
+}

@@ -9,7 +9,7 @@ import {
 
 
 import TradingViewWidget from "@/components/chart/TradingViewWidget"
-import { useCampaign, useCampaignMySummary } from "@/hooks/useCampaign"
+import { useCampaign, useCampaignMySummary, useCampaignMyOpenOrders, useCampaignMyExecutedOrders } from "@/hooks/useCampaign"
 
 interface CampaignPageProps {
   campaignId: string
@@ -18,9 +18,11 @@ interface CampaignPageProps {
 export default function CampaignPage({ campaignId }: CampaignPageProps) {
   const { data: campaign, isLoading: campaignLoading, error: campaignError } = useCampaign(campaignId);
   const { data: mySummaryResponse, isLoading: mySummaryLoading, error: mySummaryError } = useCampaignMySummary(campaignId);
+  const { data: myOpenOrders, isLoading: myOpenOrdersLoading, error: myOpenOrdersError } = useCampaignMyOpenOrders(campaignId);
+  const { data: myExecutedOrders, isLoading: myExecutedOrdersLoading, error: myExecutedOrdersError } = useCampaignMyExecutedOrders(campaignId);
 
-  const isLoading = campaignLoading || mySummaryLoading;
-  const error = campaignError || mySummaryError;
+  const isLoading = campaignLoading || mySummaryLoading || myOpenOrdersLoading || myExecutedOrdersLoading;
+  const error = campaignError || mySummaryError || myOpenOrdersError || myExecutedOrdersError;
 
   if (isLoading) {
     return (
@@ -51,7 +53,11 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
   const mySummaryData = mySummaryResponse?.my_summary;
 
   // Helper functions for formatting
-  const formatVolume = (volume: number) => `$${volume.toLocaleString()}`;
+  const formatVolume = (volume: number) => `${volume.toLocaleString()} KRW`;
+  const formatDateTime = (dateString: string) => {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleString();
+  };
 
   return (
     <div className="container mx-auto max-w-9xl">
@@ -73,7 +79,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Exchange</div>
-              <div className="text-lg number-font">{campaign.supportedExchanges}</div>
+              <div className="text-lg number-font">{campaign.supportedExchanges?.join(', ') ?? ''}</div>
             </div>
           </div>
 
@@ -89,7 +95,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             </div>
             {campaign.tokenSymbol && <TradingViewWidget token={campaign.tokenSymbol} />}
           </Card>
-          <TradesCard mySummaryData={mySummaryData} />
+          <TradesCard myOpenOrders={myOpenOrders} myExecutedOrders={myExecutedOrders} />
         </div>
         <div className='w-96 min-h-screen p-6 space-y-6'>
           <Card className="dark rounded-[2px] overflow-hidden">
@@ -97,12 +103,18 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
               Campaign
             </CardHeader>
             <div className="flex flex-col gap-1 px-6">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">Start Time - End Time</div>
-              <div className="text-normal number-font">{campaign.startTime} - {campaign.endTime}</div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Start Time</div>
+              <div className="text-normal number-font">{formatDateTime(campaign.startTime)}</div>
+            </div>
+            <div className="flex flex-col gap-1 px-6">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">End Time</div>
+              <div className="text-normal number-font">{formatDateTime(campaign.endTime)}</div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
-              <div className="text-normal number-font">{campaign.rewardTotalQuantity}</div>
+              <div className="text-normal number-font">{campaign.rewardTotalQuantity}
+                <span className="text-[#EE82DA] uppercase font-bold"> {campaign.tokenSymbol}</span>
+              </div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize structure</div>
@@ -126,7 +138,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Total Executed Trade Vol</div>
               <div className="text-normal number-font">
-                {mySummaryData?.trading_volume ? formatVolume(mySummaryData.trading_volume) : '$0'}
+                {mySummaryData?.trading_volume ? formatVolume(mySummaryData.trading_volume) : '0 KRW'}
               </div>
             </div>
             <div className="flex flex-col gap-1 px-6">
