@@ -1,19 +1,20 @@
-const API_BASE_URL = 'http://localhost:3000/api/v1/demo';
+const API_BASE_URL = 'http://localhost:3000';
 
 export interface Campaign {
   id: string;
-  name: string;
-  token: string;
-  startDate: string;
-  endDate: string;
-  prizePool: string;
-  prizeStructure: string;
-  rules: string;
+  title: string;
+  tokenSymbol: string;
+  startTime: string;
+  endTime: string;
+  rewardTotalQuantity: string;
+  rewardSymbol: string;
+  rewardDistributionMethod: string;
+  rewardAllocationMethod: string;
+  rewardMaxParticipants: string;
   tokenCurrentPrice: string;
   priceChange: string;
   priceChangePercent: string;
-  exchange: string;
-  totalPrizePool: string;
+  supportedExchanges: string;
 }
 
 export interface Order {
@@ -44,20 +45,18 @@ export interface RankingEntry {
   rank: number;
   user_id: string;
   wallet: string;
-  profit: number;
   trades: number;
   volume: number;
 }
 
-export interface UserData {
-  campaign_id: number;
-  user_id: string;
-  eligibilityForPrizePool: boolean;
-  totalExecutedTradeVol: number;
-  outstandingOrders: Order[];
-  prize_pool_rank: number;
-  price_pool_rank_listing: RankingEntry[];
+export interface MyData {
+  campaignId: number;
+  userId: string;
+  rewardEligibility: boolean;
+  tradingVolume: number;
+  rewardRank: number;
   executedOrders: Order[];
+  outstandingOrders: Order[];
 }
 
 class ApiError extends Error {
@@ -106,18 +105,19 @@ function transformCampaignResponse(apiResponse: any): Campaign {
 
   return {
     id: safeStringify(apiResponse.id || apiResponse.campaign_id),
-    name: safeStringify(apiResponse.name || apiResponse.campaign_name || 'Unnamed Campaign'),
-    token: safeStringify(apiResponse.token || apiResponse.symbol),
-    startDate: safeStringify(apiResponse.start_date || apiResponse.startDate),
-    endDate: safeStringify(apiResponse.end_date || apiResponse.endDate),
-    prizePool: safeStringify(apiResponse.prize_pool || apiResponse.prizePool),
-    prizeStructure: safeStringify(apiResponse.prize_structure || apiResponse.prizeStructure),
-    rules: safeStringify(apiResponse.rules),
-    tokenCurrentPrice: safeStringify(apiResponse.token_current_price || apiResponse.tokenCurrentPrice || apiResponse.current_price || apiResponse.price),
-    priceChange: safeStringify(apiResponse.price_change || apiResponse.priceChange || apiResponse.change || apiResponse.price_diff),
-    priceChangePercent: safeStringify(apiResponse.price_change_percent || apiResponse.priceChangePercent || apiResponse.price_change_percentage || apiResponse.change_percent),
-    exchange: safeStringify(apiResponse.exchange),
-    totalPrizePool: safeStringify(apiResponse.total_prize_pool || apiResponse.totalPrizePool || apiResponse.prize_pool),
+    title: safeStringify(apiResponse.title || 'Unnamed Campaign'),
+    tokenSymbol: safeStringify(apiResponse.token_symbol),
+    startTime: safeStringify(apiResponse.start_time),
+    endTime: safeStringify(apiResponse.end_time),
+    rewardTotalQuantity: safeStringify(apiResponse.reward_total_quantity),
+    rewardSymbol: safeStringify(apiResponse.reward_symbol),
+    rewardDistributionMethod: safeStringify(apiResponse.reward_distribution_method),
+    rewardAllocationMethod: safeStringify(apiResponse.reward_allocation_method),
+    rewardMaxParticipants: safeStringify(apiResponse.reward_max_participants),
+    tokenCurrentPrice: safeStringify(apiResponse.token_current_price),
+    priceChange: safeStringify(apiResponse.price_change),
+    priceChangePercent: safeStringify(apiResponse.price_change_percent),
+    supportedExchanges: safeStringify(apiResponse.supported_exchanges),
   };
 }
 
@@ -150,7 +150,7 @@ function transformOrder(orderData: any): Order {
 
 export const campaignApi = {
   getCampaign: async (campaignId: string): Promise<Campaign> => {
-    const response = await apiRequest<any>(`/campaigns/${campaignId}`);
+    const response = await apiRequest<any>(`/api/v1/campaigns/${campaignId}`);
 
     // Handle potential nested response structure
     const campaignData = response.campaign || response.data || response;
@@ -158,17 +158,17 @@ export const campaignApi = {
     return transformCampaignResponse(campaignData);
   },
 
-  getUserData: async (campaignId: string, userId: string = '123'): Promise<{ user_data: UserData }> => {
-    const response = await apiRequest<any>(`/campaigns/${campaignId}/user_data?user_id=${userId}`);
+  getCampaignMySummary: async (campaignId: string): Promise<{ my_summary: MySummary }> => {
+    const response = await apiRequest<any>(`/api/v1/campaigns/${campaignId}/my_summary`);
 
     // Transform the response to handle any field mapping if needed
-    if (response.user_data) {
+    if (response.my_summary) {
       // Ensure outstandingOrders and executedOrders are properly mapped
-      if (response.user_data.outstandingOrders) {
-        response.user_data.outstandingOrders = response.user_data.outstandingOrders.map(transformOrder);
+      if (response.my_summary.outstandingOrders) {
+        response.my_summary.outstandingOrders = response.my_summary.outstandingOrders.map(transformOrder);
       }
-      if (response.user_data.executedOrders) {
-        response.user_data.executedOrders = response.user_data.executedOrders.map(transformOrder);
+      if (response.my_summary.executedOrders) {
+        response.my_summary.executedOrders = response.my_summary.executedOrders.map(transformOrder);
       }
     }
 
