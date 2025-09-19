@@ -105,20 +105,20 @@ export default function CampaignsList() {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
+{/*                <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-1">
                     <div className="text-xs uppercase text-[#FAFAFA]/30">Current Price</div>
                     <div className="text-lg number-font text-[#FAFAFA]">
                       {c.token_current_price || '0.00'} {c.price_currency || 'USD'}
                     </div>
                   </div>
-{/*                  <div className="flex flex-col gap-1 text-right">
+                  <div className="flex flex-col gap-1 text-right">
                     <div className="text-xs uppercase text-[#FAFAFA]/30">Max Trades/Day</div>
                     <div className="text-sm number-font text-[#FAFAFA]">
                       {c.rules?.max_trades_per_day || 'Unlimited'}
                     </div>
-                  </div>*/}
-                </div>
+                  </div>
+                </div>*/}
 
                 <div className="space-y-3">
                   <div className="flex justify-between">
@@ -176,7 +176,7 @@ export default function CampaignsList() {
                 <TableRow>
                   <TableHead>Campaign</TableHead>
                   <TableHead>Token</TableHead>
-                  <TableHead>Current Price</TableHead>
+                  {/*<TableHead>Current Price</TableHead>*/}
                   <TableHead>Prize Pool</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Method</TableHead>
@@ -202,11 +202,11 @@ export default function CampaignsList() {
                     <TableCell>
                       <span className="text-[#EE82DA] uppercase font-bold">{c.token_symbol || 'TOKEN'}</span>
                     </TableCell>
-                    <TableCell>
+{/*                    <TableCell>
                       <div className="text-sm number-font text-[#FAFAFA]">
                         {c.token_current_price || '0.00'} {c.price_currency || 'USD'}
                       </div>
-                    </TableCell>
+                    </TableCell>*/}
                     <TableCell>
                       <div className="text-sm number-font text-[#FAFAFA]">
                         {c.reward_total_quantity || '0'} {c.reward_symbol || c.token_symbol || 'tokens'}

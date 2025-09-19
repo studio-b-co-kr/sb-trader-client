@@ -10,7 +10,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 
-import { CircleCheck } from "lucide-react"
+import { CircleCheck, ExternalLink } from "lucide-react"
 
 import {
   Table,
@@ -149,6 +149,7 @@ export default function TradesCard({ myOpenOrders, myExecutedOrders }: TradesCar
                 <TableHead className="text-right">Total</TableHead>
                 <TableHead className="text-right">Value</TableHead>
                 <TableHead className="text-right">Fee</TableHead>
+                <TableHead className="text-right">Tx ID</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -177,6 +178,10 @@ export default function TradesCard({ myOpenOrders, myExecutedOrders }: TradesCar
                     <TableCell className="text-right number-font">{formatCurrency(order.orderValue)}</TableCell>
                     <TableCell className="text-right number-font">{formatCurrency(order.filledValue)}</TableCell>
                     <TableCell className="text-right number-font">{formatFee(order.feeAmount)}</TableCell>
+                    <TableCell className="text-right number-font cursor-pointer"
+                      onClick={() => window.open(`https://testnet.suivision.xyz/txblock/${order.txId}`, "_blank")}>
+                      <ExternalLink className="w-4 h-4 inline" />
+                    </TableCell>
                   </TableRow>
                 ))
               )}

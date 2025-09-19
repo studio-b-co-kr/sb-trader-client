@@ -40,6 +40,8 @@ export interface Order {
   feeCurrency: string;
   feeAmount: number;
 
+  txId: string;
+
   createdAt: string;
 }
 
@@ -59,7 +61,7 @@ export interface MySummary {
   rewardRank: number;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   public status: number;
 
   constructor(status: number, message: string) {
@@ -142,6 +144,7 @@ function transformOrder(orderData: any): Order {
     status: orderData.status,
     feeCurrency: orderData.fees && orderData.fees[0] ? orderData.fees[0].fee_coin : 0,
     feeAmount: orderData.fees && orderData.fees[0] ? Number(orderData.fees[0].fee) : 0,
+    txId: orderData.tx_id,
     createdAt: orderData.created_at || orderData.input_date,
   };
 }
