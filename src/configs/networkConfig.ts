@@ -6,12 +6,20 @@ import {
   MAINNET_PACKAGE_ID,
   LOCALTNET_PACKAGE_ID,
 } from "../constants/package_ids.ts";
+
 import {
   DEVNET_TRANSACTION_BOOK_ID,
   TESTNET_TRANSACTION_BOOK_ID,
   MAINNET_TRANSACTION_BOOK_ID,
   LOCALTNET_TRANSACTION_BOOK_ID,
 } from "../constants/tx_book_ids.ts";
+
+import {
+  DEVNET_ADDRESS,
+  TESTNET_ADDRESS,
+  MAINNET_ADDRESS,
+  LOCALTNET_ADDRESS,
+} from "../constants/wallet_addresses.ts";
 
 const { networkConfig, useNetworkVariable, useNetworkVariables } =
   createNetworkConfig({
@@ -20,6 +28,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       variables: {
         suimmingPackageId: DEVNET_PACKAGE_ID,
         transactionBookId: DEVNET_TRANSACTION_BOOK_ID,
+        walletAddress: DEVNET_ADDRESS,
       }
     },
     testnet: {
@@ -27,6 +36,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       variables: {
         suimmingPackageId: TESTNET_PACKAGE_ID,
         transactionBookId: TESTNET_TRANSACTION_BOOK_ID,
+        walletAddress: TESTNET_ADDRESS,
       }
     },
     mainnet: {
@@ -34,6 +44,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       variables: {
         suimmingPackageId: MAINNET_PACKAGE_ID,
         transactionBookId: MAINNET_TRANSACTION_BOOK_ID,
+        walletAddress: MAINNET_ADDRESS,
       }
     },
     localnet: {
@@ -41,6 +52,7 @@ const { networkConfig, useNetworkVariable, useNetworkVariables } =
       variables: {
         suimmingPackageId: LOCALTNET_PACKAGE_ID,
         transactionBookId: LOCALTNET_TRANSACTION_BOOK_ID,
+        walletAddress: LOCALTNET_ADDRESS,
       },
     },
   });

@@ -1,22 +1,83 @@
 import {
+  useCurrentAccount,
+  useSignAndExecuteTransaction,
+  useSuiClient,
+} from '@mysten/dapp-kit'
+import { Transaction } from '@mysten/sui/transactions'
+import { Button } from "@/components/ui/button"
+import { useNetworkVariable } from '../configs/networkConfig'
+
+
+import {
   Card,
   CardHeader,
 } from "@/components/ui/card"
 
 // Image assets from Figma
-const imgLine12 = "http://localhost:3845/assets/66aaa6457c36fdbeeebea435ae78d389212ac6ec.svg";
-const imgLine13 = "http://localhost:3845/assets/717c9dd3db4e95121b97fcdddd790324f9fe5dbe.svg";
-const imgEllipse1 = "http://localhost:3845/assets/ae82a44d683d69346ab4d23e923f9dea8e5187ba.svg";
-const imgEllipse2 = "http://localhost:3845/assets/f51fdd54b33206262eb1610ebc9525be67312a1e.svg";
-const imgGroup = "http://localhost:3845/assets/e8f26c068d379f22408a7dc4b0ae43be9ccb5916.svg";
+// const imgLine12 = "http://localhost:3845/assets/66aaa6457c36fdbeeebea435ae78d389212ac6ec.svg";
+// const imgLine13 = "http://localhost:3845/assets/717c9dd3db4e95121b97fcdddd790324f9fe5dbe.svg";
+// const imgEllipse1 = "http://localhost:3845/assets/ae82a44d683d69346ab4d23e923f9dea8e5187ba.svg";
+// const imgEllipse2 = "http://localhost:3845/assets/f51fdd54b33206262eb1610ebc9525be67312a1e.svg";
+// const imgGroup = "http://localhost:3845/assets/e8f26c068d379f22408a7dc4b0ae43be9ccb5916.svg";
 
 interface FoundationNewCampaignProps {
   campaignId?: string;
 }
 
 const campaignName = "Blue Sept Campaign";
+const prizePool = 0.5; // TODO: change to 100000
+
 
 export default function FoundationNewCampaign({ campaignId }: FoundationNewCampaignProps) {
+  const { mutate: signAndExecuteTransaction } = useSignAndExecuteTransaction()
+  const recipientAddress = useNetworkVariable('walletAddress')
+  const account = useCurrentAccount()
+  const client = useSuiClient()
+  
+  const handleTransferToEscrow = async () => {
+
+    if (!account) {
+      alert('Wallet not connected.')
+      return
+    }
+
+    try {
+      const coins = await client.getCoins({
+        owner: account.address,
+        coinType: '0x2::sui::SUI', // TODO: make dynamic based on token type
+      })
+
+      if (!coins.data.length) {
+        alert('No SUI coins found in wallet.')
+        return
+      }
+
+      const tx = new Transaction()
+      const [coin] = tx.splitCoins(coins.data[0].coinObjectId, [prizePool * 1_000_000_000]) // assuming prizePool is in SUI, convert to MIST
+      tx.transferObjects([coin], recipientAddress!)
+      await signAndExecuteTransaction(
+        {
+          transaction: tx,
+          chain: 'sui:testnet', // or 'sui:mainnet'
+          account,
+        },
+        {
+          onSuccess: (res) => {
+            alert(`✅ Transfer submitted! Digest: ${res.digest}`)
+          },
+          onError: (err) => {
+            alert('❌ Transfer failed: ' + (err.message || err))
+          },
+        }
+      )
+
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err)
+      alert('Transfer failed: ' + msg)
+    }
+  }
+
+  console.log("FoundationNewCampaign campaignId:", campaignId);
   return (
     <div className="container mx-auto max-w-9xl">
       <div className="flex flex-row justify-stretch gap-0 min-h-screen">
@@ -27,8 +88,8 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
             <div className="flex flex-col items-start justify-start gap-[2px]">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
               <div className="text-lg number-font">
-                10,000,000 
-                <span className="support-character pl-[2px]">KRW</span>
+                {prizePool.toLocaleString()}
+                <span className="support-character pl-[2px]">BLUE</span>
               </div>
             </div>
             <div className="flex flex-col items-start justify-start gap-[2px]">
@@ -59,7 +120,8 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
                   <div className="flex flex-row justify-start items-start min-h-[40px]">
                     <div className="w-20 text-center">Icon</div>
                     <div className="w-64 text-[#AAAAAA]">Prize Pool Sent</div>
-                    <div className="number-font font-light text-[#888888]">Sept 20, 2025 12:00PM KST (expected)</div>
+                    {/* <div className="number-font font-light text-[#888888]">Sept 20, 2025 12:00PM KST (expected)</div> */}
+                    <Button variant="outline" className="ml-2 text-xs px-12" onClick={() => {handleTransferToEscrow()}}>Transfer To Escrow</Button>
                   </div>
                   <div className="flex flex-row justify-start items-start min-h-[40px]">
                     <div className="w-20 text-center">Icon</div>
