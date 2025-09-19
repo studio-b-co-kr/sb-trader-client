@@ -1,8 +1,15 @@
 import { useState } from "react";
 import { useCreateCampaignOrder } from "@/hooks/useCampaignOrder";
 
-import { Card, CardHeader } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import {
+  Card,
+  CardHeader,
+} from "@/components/ui/card"
+
+import {
+  Input,
+} from "@/components/ui/input"
+
 import {
   Select,
   SelectContent,
@@ -10,24 +17,25 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/select"
+
+import {
+  Button,
+} from "@/components/ui/button"
+
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "@/components/ui/tabs";
+} from "@/components/ui/tabs"
 
 interface NewTradeCardProps {
-  campaignId: string;
+  campaignId: String;
   campaignToken: string;
 }
 
-export default function NewTradeCard({
-  campaignId,
-  campaignToken,
-}: NewTradeCardProps) {
+export default function NewTradeCard({ campaignId, campaignToken }: NewTradeCardProps) {
   const [quantity, setQuantity] = useState<number>(0);
   const [orderType, setOrderType] = useState<"limit" | "market">("limit");
   const [price, setPrice] = useState<number>(0);
@@ -37,7 +45,7 @@ export default function NewTradeCard({
   const handleSubmit = (side: "buy" | "sell") => {
     createOrder({
       campaign_id: campaignId,
-      exchange: "bithumb", // 데모용
+      exchange: "bithumb",
       symbol: `KRW-${campaignToken}`,
       order_type: orderType,
       side,
@@ -48,20 +56,18 @@ export default function NewTradeCard({
 
   return (
     <Card className="dark rounded-[2px] overflow-hidden">
-      <CardHeader className="color-[#FAFAFA]">New Trade</CardHeader>
+      <CardHeader className="color-[#FAFAFA]">
+        New Trade
+      </CardHeader>
       <Tabs defaultValue="buy" className="px-6">
         <TabsList>
           <TabsTrigger value="buy">Buy</TabsTrigger>
           <TabsTrigger value="sell">Sell</TabsTrigger>
         </TabsList>
-
-        {/* Buy 탭 */}
         <TabsContent value="buy">
           <div className="space-y-6 py-6">
             <div className="flex flex-col gap-2">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">
-                {campaignToken} Quantity
-              </div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">{campaignToken} Quantity</div>
               <Input
                 type="number"
                 placeholder="Enter quantity"
@@ -70,17 +76,11 @@ export default function NewTradeCard({
                 onChange={(e) => setQuantity(Number(e.target.value))}
               />
             </div>
-
             <div className="flex flex-col gap-2">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">
-                Order Type
-              </div>
-              <Select
-                value={orderType}
-                onValueChange={(v) => setOrderType(v as "limit" | "market")}
-              >
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Order Type</div>
+              <Select value={orderType} onValueChange={(val) => setOrderType(val as "limit" | "market")}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -89,29 +89,21 @@ export default function NewTradeCard({
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <div className="flex flex-row gap-2">
-                <div className="text-xs uppercase text-[#FAFAFA]/30">
-                  Market Price
-                </div>
+{/*              <div className="flex flex-row gap-2">
+                <div className="text-xs uppercase text-[#FAFAFA]/30">Market Price</div>
                 <div className="text-xs number-font">$100</div>
-              </div>
+              </div>*/}
             </div>
-
-            {orderType === "limit" && (
-              <div className="flex flex-col gap-2">
-                <div className="text-sm uppercase text-[#FAFAFA]/30">
-                  Limit Price
-                </div>
-                <Input
-                  type="number"
-                  placeholder="Price"
-                  className="number-font"
-                  value={price || ""}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
-              </div>
-            )}
-
+            <div className="flex flex-col gap-2">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Price</div>
+              <Input
+                type="number"
+                placeholder="Price"
+                className="number-font"
+                value={price || ""}
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+            </div>
             <Button
               onClick={() => handleSubmit("buy")}
               variant="outline"
@@ -123,33 +115,22 @@ export default function NewTradeCard({
             </Button>
           </div>
         </TabsContent>
-
-        {/* Sell 탭 */}
         <TabsContent value="sell">
           <div className="space-y-6 py-6">
             <div className="flex flex-col gap-2">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">
-                {campaignToken} Quantity
-              </div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">{campaignToken} Quantity</div>
               <Input
                 type="number"
                 placeholder="Enter quantity"
                 className="number-font"
                 value={quantity || ""}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-              />
+                onChange={(e) => setQuantity(Number(e.target.value))} />
             </div>
-
             <div className="flex flex-col gap-2">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">
-                Order Type
-              </div>
-              <Select
-                value={orderType}
-                onValueChange={(v) => setOrderType(v as "limit" | "market")}
-              >
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Order Type</div>
+              <Select value={orderType} onValueChange={(val) => setOrderType(val as "limit" | "market")}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -158,29 +139,25 @@ export default function NewTradeCard({
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <div className="flex flex-row gap-2">
-                <div className="text-xs uppercase text-[#FAFAFA]/30">
-                  Market Price
-                </div>
+{/*              <div className="flex flex-row gap-2">
+                <div className="text-xs uppercase text-[#FAFAFA]/30">Market Price</div>
                 <div className="text-xs number-font">$100</div>
-              </div>
+              </div>*/}
             </div>
-
-            {orderType === "limit" && (
-              <div className="flex flex-col gap-2">
-                <div className="text-sm uppercase text-[#FAFAFA]/30">
-                  Limit Price
-                </div>
-                <Input
-                  type="number"
-                  placeholder="Price"
-                  className="number-font"
-                  value={price || ""}
-                  onChange={(e) => setPrice(Number(e.target.value))}
-                />
-              </div>
-            )}
-
+            <div className="flex flex-col gap-2">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Price</div>
+              <Input
+                type="number"
+                placeholder="Price"
+                className="number-font"
+                value={price || ""}
+                onChange={(e) => setPrice(Number(e.target.value))}
+              />
+            </div>
+{/*            <div className="flex flex-col gap-2">
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Order Value</div>
+              <Input type="number" placeholder="Value" className="number-font" />
+            </div>*/}
             <Button
               onClick={() => handleSubmit("sell")}
               variant="outline"
@@ -188,11 +165,11 @@ export default function NewTradeCard({
               className="w-full uppercase number-font"
               disabled={isLoading}
             >
-              Place Sell Order
+              {isLoading ? "Placing..." : "Place Sell Order"}
             </Button>
           </div>
         </TabsContent>
       </Tabs>
     </Card>
-  );
+  )
 }
