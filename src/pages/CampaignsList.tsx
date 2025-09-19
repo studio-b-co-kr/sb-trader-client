@@ -1,4 +1,4 @@
-import logoBlue from "@/assets/logo-blue.png"
+import suiLogo from "@/assets/sui-logo.png"
 import {
   useNavigate,
  } from "@tanstack/react-router";
@@ -74,7 +74,7 @@ export default function CampaignsList() {
   }
 
   return (
-    <div className="containe p-6">
+    <div className="container p-6">
       <div className="max-w-9xl mx-auto">
         <div className="mb-6">
           <h1 className="text-3xl text-[#FAFAFA] mb-2 fancy-font">Campaigns</h1>
@@ -95,7 +95,7 @@ export default function CampaignsList() {
                     <span className="capitalize">{c.title || 'campaign'}</span>
                   </CardTitle>
                   <div className="flex flex-row items-start gap-2 mb-2">
-                    <img src={logoBlue} alt="Logo" className="w-6 h-6" />
+                    <img src={suiLogo} alt="Logo" className="w-6 h-6" />
                     <span className="text-[#EE82DA] uppercase font-bold">{c.token_symbol || 'TOKEN'}</span>
                   </div>
                 </div>
@@ -105,20 +105,20 @@ export default function CampaignsList() {
               </CardHeader>
 
               <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
+{/*                <div className="flex justify-between items-center">
                   <div className="flex flex-col gap-1">
                     <div className="text-xs uppercase text-[#FAFAFA]/30">Current Price</div>
                     <div className="text-lg number-font text-[#FAFAFA]">
                       {c.token_current_price || '0.00'} {c.price_currency || 'USD'}
                     </div>
                   </div>
-{/*                  <div className="flex flex-col gap-1 text-right">
+                  <div className="flex flex-col gap-1 text-right">
                     <div className="text-xs uppercase text-[#FAFAFA]/30">Max Trades/Day</div>
                     <div className="text-sm number-font text-[#FAFAFA]">
                       {c.rules?.max_trades_per_day || 'Unlimited'}
                     </div>
-                  </div>*/}
-                </div>
+                  </div>
+                </div>*/}
 
                 <div className="space-y-3">
                   <div className="flex justify-between">
@@ -152,7 +152,7 @@ export default function CampaignsList() {
                         ? 'bg-[#EE82DA]/20 text-[#EE82DA]'
                         : c.status === 'completed'
                         ? 'bg-green-400/20 text-green-400'
-                        : c.status === 'ended'
+                        : c.status === 'cancelled'
                         ? 'bg-red-400/20 text-red-400'
                         : 'bg-yellow-400/20 text-yellow-400'
                     }`}>
@@ -176,7 +176,7 @@ export default function CampaignsList() {
                 <TableRow>
                   <TableHead>Campaign</TableHead>
                   <TableHead>Token</TableHead>
-                  <TableHead>Current Price</TableHead>
+                  {/*<TableHead>Current Price</TableHead>*/}
                   <TableHead>Prize Pool</TableHead>
                   <TableHead>Duration</TableHead>
                   <TableHead>Method</TableHead>
@@ -195,18 +195,18 @@ export default function CampaignsList() {
                   >
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
-                        <img src={logoBlue} alt="Logo" className="w-5 h-5" />
+                        <img src={suiLogo} alt="Logo" className="w-5 h-5" />
                         <span className="capitalize">{c.title || 'campaign'}</span>
                       </div>
                     </TableCell>
                     <TableCell>
                       <span className="text-[#EE82DA] uppercase font-bold">{c.token_symbol || 'TOKEN'}</span>
                     </TableCell>
-                    <TableCell>
+{/*                    <TableCell>
                       <div className="text-sm number-font text-[#FAFAFA]">
                         {c.token_current_price || '0.00'} {c.price_currency || 'USD'}
                       </div>
-                    </TableCell>
+                    </TableCell>*/}
                     <TableCell>
                       <div className="text-sm number-font text-[#FAFAFA]">
                         {c.reward_total_quantity || '0'} {c.reward_symbol || c.token_symbol || 'tokens'}

@@ -1,4 +1,4 @@
-import logoBlue from "@/assets/logo-blue.png"
+import suiLogo from "@/assets/sui-logo.png"
 import NewTradeCard from "@/components/NewTradeCard"
 import TradesCard from "@/components/TradesCard"
 
@@ -65,7 +65,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
         <div className="flex-grow min-h-screen border-r border-[#B6A2B7]/20 pr-6 pt-6">
           <div className="mb-6 flex flex-row gap-8 items-center">
             <h1 className="text-xl flex flex-row gap-1">
-              <img src={logoBlue} alt="Logo" className="w-8 h-8" />
+              <img src={suiLogo} alt="Logo" className="w-8 h-8" />
               <span className="lowercase">{campaign.title}</span>
               <span className="text-[#EE82DA] uppercase font-bold">{campaign.tokenSymbol}</span>
             </h1>
@@ -154,7 +154,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
               </div>
             )}
           </Card>
-          <NewTradeCard campaignToken={campaign.tokenSymbol} />
+          <NewTradeCard campaignToken={campaign.tokenSymbol} campaignId={campaignId} />
         </div>
       </div>
     </div>

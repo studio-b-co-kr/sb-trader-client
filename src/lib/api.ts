@@ -40,6 +40,8 @@ export interface Order {
   feeCurrency: string;
   feeAmount: number;
 
+  txId: string;
+
   createdAt: string;
 }
 
@@ -59,7 +61,7 @@ export interface MySummary {
   rewardRank: number;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   public status: number;
 
   constructor(status: number, message: string) {
@@ -142,6 +144,7 @@ function transformOrder(orderData: any): Order {
     status: orderData.status,
     feeCurrency: orderData.fees && orderData.fees[0] ? orderData.fees[0].fee_coin : 0,
     feeAmount: orderData.fees && orderData.fees[0] ? Number(orderData.fees[0].fee) : 0,
+    txId: orderData.tx_id,
     createdAt: orderData.created_at || orderData.input_date,
   };
 }
@@ -180,3 +183,32 @@ export const campaignApi = {
     return response;
   },
 };
+
+export const campaignOrderApi = {
+  createCampaignOrder: async (orderData: {
+    campaign_id: number;
+    exchange: string;
+    symbol: string;
+    order_type: string; // "limit" | "market"
+    side: 'buy' | 'sell';
+    order_price: number;
+    order_quantity: number;
+  }): Promise<Order> => {
+    const response = await fetch(`${API_BASE_URL}/api/v1/campaign_orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+      },
+      body: JSON.stringify({ campaign_order: orderData }),
+    });
+
+    if (!response.ok) {
+      throw new ApiError(response.status, `Failed to create campaign order: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return transformOrder(json.campaign_order);
+  },
+};
+
