@@ -13,8 +13,6 @@ import {
   CardHeader,
 } from "@/components/ui/card"
 
-import { Button } from "@/components/ui/button";
-
 import { 
   Circle,
   CircleCheck,
@@ -83,7 +81,7 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
   return (
     <div className="container mx-auto max-w-9xl">
       <div className="flex flex-row justify-stretch gap-0 min-h-screen">
-        <div className="flex-grow border-r border-[#B6A2B7]/20 pr-6 pt-6 max-w-4xl">
+        <div className="flex-grow border-r border-[#B6A2B7]/20 pr-6 py-6 max-w-4xl">
           <div className="fancy-font text-[#FAFAFA] text-[48px]">Campaign Agreement</div>
           <div className="flex flex-row items-end gap-x-20 pt-8 pb-12 mb-12 border-b border-[#DDDDDD]/10">
             <div className="text-[24px] text-[#DDDDDD]/80 font-normal">{campaignName}</div>

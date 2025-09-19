@@ -180,3 +180,32 @@ export const campaignApi = {
     return response;
   },
 };
+
+export const campaignOrderApi = {
+  createCampaignOrder: async (orderData: {
+    campaign_id: number;
+    exchange: string;
+    symbol: string;
+    order_type: string; // "limit" | "market"
+    side: 'buy' | 'sell';
+    order_price: number;
+    order_quantity: number;
+  }): Promise<Order> => {
+    const response = await fetch(`${API_BASE_URL}/api/v1/campaign_orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStrage.getItem("access_token")}`,
+      },
+      body: JSON.stringify({ campaign_order: orderData }),
+    });
+
+    if (!response.ok) {
+      throw new ApiError(response.status, `Failed to create campaign order: ${response.statusText}`);
+    }
+
+    const json = await response.json();
+    return transformOrder(json.campaign_order);
+  },
+};
+
