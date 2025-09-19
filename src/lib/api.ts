@@ -61,7 +61,7 @@ export interface MySummary {
   rewardRank: number;
 }
 
-export class ApiError extends Error {
+class ApiError extends Error {
   public status: number;
 
   constructor(status: number, message: string) {
@@ -198,7 +198,7 @@ export const campaignOrderApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+        // 'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
       },
       body: JSON.stringify({ campaign_order: orderData }),
     });
