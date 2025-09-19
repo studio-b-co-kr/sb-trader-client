@@ -9,7 +9,7 @@ import {
 
 
 import TradingViewWidget from "@/components/chart/TradingViewWidget"
-import { useCampaign, useUserData } from "@/hooks/useCampaign"
+import { useCampaign, useCampaignMySummary } from "@/hooks/useCampaign"
 
 interface CampaignPageProps {
   campaignId: string
@@ -17,10 +17,10 @@ interface CampaignPageProps {
 
 export default function CampaignPage({ campaignId }: CampaignPageProps) {
   const { data: campaign, isLoading: campaignLoading, error: campaignError } = useCampaign(campaignId);
-  const { data: userDataResponse, isLoading: userLoading, error: userError } = useUserData(campaignId);
+  const { data: mySummaryResponse, isLoading: mySummaryLoading, error: mySummaryError } = useCampaignMySummary(campaignId);
 
-  const isLoading = campaignLoading || userLoading;
-  const error = campaignError || userError;
+  const isLoading = campaignLoading || mySummaryLoading;
+  const error = campaignError || mySummaryError;
 
   if (isLoading) {
     return (
@@ -48,7 +48,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
     );
   }
 
-  const userData = userDataResponse?.user_data;
+  const mySummaryData = mySummaryResponse?.my_summary;
 
   // Helper functions for formatting
   const formatVolume = (volume: number) => `$${volume.toLocaleString()}`;
@@ -60,8 +60,8 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
           <div className="mb-6 flex flex-row gap-8 items-center">
             <h1 className="text-xl flex flex-row gap-1">
               <img src={logoBlue} alt="Logo" className="w-8 h-8" />
-              <span className="lowercase">{campaign.name}</span>
-              <span className="text-[#EE82DA] uppercase font-bold">{campaign.token}</span>
+              <span className="lowercase">{campaign.title}</span>
+              <span className="text-[#EE82DA] uppercase font-bold">{campaign.tokenSymbol}</span>
             </h1>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Current Price</div>
@@ -69,11 +69,11 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
-              <div className="text-lg number-font">{campaign.totalPrizePool}</div>
+              <div className="text-lg number-font">{campaign.rewardTotalQuantity}</div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Exchange</div>
-              <div className="text-lg number-font">{campaign.exchange}</div>
+              <div className="text-lg number-font">{campaign.supportedExchanges}</div>
             </div>
           </div>
 
@@ -87,9 +87,9 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
                 <div>({campaign.priceChangePercent}<span className="support-character">%</span>)</div>
               </div>
             </div>
-            {campaign.token && <TradingViewWidget token={campaign.token} />}
+            {campaign.tokenSymbol && <TradingViewWidget token={campaign.tokenSymbol} />}
           </Card>
-          <TradesCard userData={userData} />
+          <TradesCard mySummaryData={mySummaryData} />
         </div>
         <div className='w-96 min-h-screen p-6 space-y-6'>
           <Card className="dark rounded-[2px] overflow-hidden">
@@ -97,20 +97,20 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
               Campaign
             </CardHeader>
             <div className="flex flex-col gap-1 px-6">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">Start Date - End Date</div>
-              <div className="text-normal number-font">{campaign.startDate} - {campaign.endDate}</div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Start Time - End Time</div>
+              <div className="text-normal number-font">{campaign.startTime} - {campaign.endTime}</div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
-              <div className="text-normal number-font">{campaign.prizePool}</div>
+              <div className="text-normal number-font">{campaign.rewardTotalQuantity}</div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize structure</div>
-              <div className="text-normal number-font">{campaign.prizeStructure}</div>
+              <div className="text-normal number-font">{campaign.rewardAllocationMethod}</div>
             </div>
             <div className="flex flex-col gap-1 px-6">
-              <div className="text-sm uppercase text-[#FAFAFA]/30">Rules</div>
-              <div className="text-sm number-font">{campaign.rules}</div>
+              <div className="text-sm uppercase text-[#FAFAFA]/30">Max Participant</div>
+              <div className="text-sm number-font">{campaign.rewardMaxParticipants}</div>
             </div>
           </Card>
           <Card className="dark rounded-[2px] overflow-hidden">
@@ -120,29 +120,29 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Eligibility for Prize Pool</div>
               <div className="text-normal number-font">
-                {userData?.eligibilityForPrizePool ? 'Eligible' : 'Not Eligible'}
+                {mySummaryData?.reward_eligibility ? 'Eligible' : 'Not Eligible'}
               </div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Total Executed Trade Vol</div>
               <div className="text-normal number-font">
-                {userData ? formatVolume(userData.totalExecutedTradeVol) : '$0'}
+                {mySummaryData?.trading_volume ? formatVolume(mySummaryData.trading_volume) : '$0'}
               </div>
             </div>
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Outstanding Orders</div>
               <div className="text-normal number-font">
-                {userData?.outstandingOrders?.length || 0} orders
+                {mySummaryData?.outstandingOrders?.length || 0} orders
               </div>
             </div>
-            {userData && userData.prize_pool_rank && (
+            {mySummaryData && mySummaryData.reward_rank && (
               <div className="flex flex-col gap-1 px-6">
                 <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool Rank</div>
-                <div className="text-normal number-font">#{userData.prize_pool_rank}</div>
+                <div className="text-normal number-font">#{mySummaryData.reward_rank}</div>
               </div>
             )}
           </Card>
-          <NewTradeCard campaignToken={campaign.token} />
+          <NewTradeCard campaignToken={campaign.tokenSymbol} />
         </div>
       </div>
     </div>
