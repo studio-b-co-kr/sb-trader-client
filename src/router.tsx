@@ -9,18 +9,75 @@ import {
   Outlet,
   useLocation
 } from "@tanstack/react-router";
+import { useEffect } from "react";
+import axios from 'axios'
 import Home from "./pages/Home";
 import CampaignsList from "./pages/CampaignsList";
 import CampaignPage from "./pages/CampaignPage";
 import FoundationNewCampaign from "./pages/FoundationNewCampaign";
 import TradesPage from "./pages/TradesPage";
-import { ConnectButton } from "@mysten/dapp-kit";
+import { ConnectButton, useCurrentAccount, useWallets } from "@mysten/dapp-kit";
 
 // Root layout route
 const RootRoute = createRootRoute({
   component: function RootLayout() {
     const location = useLocation();
     const isHomePage = location.pathname === "/";
+
+    const account = useCurrentAccount();
+    const wallets = useWallets()
+
+    async function connectUser(address: string, walletName?: string) {
+      try {
+        const response = await axios.post('http://127.0.0.1:3000/api/v1/users/connect', {
+          wallet_address: address,
+          wallet_type: walletName || 'undefined',
+        });
+        const { access_token } = response.data;
+
+        if (access_token) {
+          localStorage.setItem('access_token', access_token);
+          console.log('🔐 Access token saved to localStorage');
+        } else {
+          console.warn('⚠️ No access token returned in response');
+        }
+        console.log('📡 Connected user successfully:', response.data);
+      } catch (error) {
+        console.error('❌ Failed to connect user:', error);
+      }
+    }
+
+    async function disconnectUser() {
+      try {
+        const token = localStorage.getItem('access_token');
+
+        if (!token) {
+          return;
+        }
+
+        localStorage.clear();
+        await axios.delete('http://127.0.0.1:3000/api/v1/users/disconnect', {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+
+        console.log('🔐 User disconnected, token removed');
+      } catch (error) {
+        console.error('❌ Failed to disconnect user:', error);
+      }
+    }
+
+    useEffect(() => {
+      if (account) {
+         const wallet = wallets.find((w) =>
+          w.accounts.some((a) => a.address === account.address)
+        )
+        connectUser(account.address, wallet?.name);
+      } else {
+        disconnectUser()
+      }
+    }, [account, wallets]);
     
     return (
       <div className="h-screen overflow-auto">
