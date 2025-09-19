@@ -25,30 +25,30 @@ import {
 import type { UserData } from "@/lib/api"
 
 interface TradesCardProps {
-  userData?: UserData;
+  myOpenOrders?: Order[];
+  myExecutedOrders?: Order[];
 }
 
-export default function TradesCard({ userData }: TradesCardProps) {
+export default function TradesCard({ myOpenOrders, myExecutedOrders }: TradesCardProps) {
   // Helper functions
   const formatCurrency = (amount: number) => `$${amount.toLocaleString()}`;
-  const formatDate = (dateString: string) => {
+  const formatDateTime = (dateString: string) => {
     if (!dateString) return '-';
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleString();
   };
   const formatPrice = (price: number) => price.toFixed(4);
-  const formatQuantity = (quantity: number) => quantity.toFixed(6);
+  const formatFee = (price: number) => price.toFixed(2);
+  const formatQuantity = (quantity: number) => quantity.toFixed(8);
 
   // Calculate totals for open trades
-  const outstandingOrders = userData?.outstandingOrders || [];
-  const openTotal = outstandingOrders.reduce((sum, order) => sum + (order.value || 0), 0);
-  const openSells = outstandingOrders.filter(order => order.direction === 'sell').reduce((sum, order) => sum + (order.value || 0), 0);
-  const openBuys = outstandingOrders.filter(order => order.direction === 'buy').reduce((sum, order) => sum + (order.value || 0), 0);
+  const openTotal = myOpenOrders.reduce((sum, order) => sum + (order.orderValue || 0), 0);
+  const openSells = myOpenOrders.filter(order => order.side === 'sell').reduce((sum, order) => sum + (order.orderValue || 0), 0);
+  const openBuys = myOpenOrders.filter(order => order.side === 'buy').reduce((sum, order) => sum + (order.orderValue || 0), 0);
 
   // Calculate totals for executed trades
-  const executedOrders = userData?.executedOrders || [];
-  const executedTotal = executedOrders.reduce((sum, order) => sum + (order.total || order.value || 0), 0);
-  const executedSells = executedOrders.filter(order => order.direction === 'sell').reduce((sum, order) => sum + (order.total || order.value || 0), 0);
-  const executedBuys = executedOrders.filter(order => order.direction === 'buy').reduce((sum, order) => sum + (order.total || order.value || 0), 0);
+  const executedTotal = myExecutedOrders.reduce((sum, order) => sum + (order.filledValue || 0), 0);
+  const executedSells = myExecutedOrders.filter(order => order.side === 'sell').reduce((sum, order) => sum + (order.filledValue || 0), 0);
+  const executedBuys = myExecutedOrders.filter(order => order.side === 'buy').reduce((sum, order) => sum + (order.filledValue || 0), 0);
 
   return (
     <Card className="w-full min-h-[400px] dark rounded-[2px] mt-6">
@@ -77,7 +77,7 @@ export default function TradesCard({ userData }: TradesCardProps) {
             </div>
           </div>
           <Table>
-            <TableCaption>Open Trades ({outstandingOrders.length} orders)</TableCaption>
+            <TableCaption>Open Trades ({myOpenOrders.length} orders)</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Input Date</TableHead>
@@ -91,31 +91,31 @@ export default function TradesCard({ userData }: TradesCardProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {outstandingOrders.length === 0 ? (
+              {!myOpenOrders || myOpenOrders.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center text-[#FAFAFA]/50">
                     No outstanding orders
                   </TableCell>
                 </TableRow>
               ) : (
-                outstandingOrders.map((order) => (
+                myOpenOrders.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell className="number-font">{formatDate(order.input_date)}</TableCell>
+                    <TableCell className="number-font">{formatDateTime(order.createdAt)}</TableCell>
                     <TableCell>
                       <span className={` ${order.status === 'pending' ? 'uppercase number-font text-gray-400' : ''}`}>
                         {order.status}
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className={`uppercase number-font ${order.direction === 'buy' ? 'text-[#DE999A]' : 'text-[#719ED2]'}`}>
-                        {order.direction}
+                      <span className={`uppercase number-font ${order.side === 'buy' ? 'text-[#DE999A]' : 'text-[#719ED2]'}`}>
+                        {order.side}
                       </span>
                     </TableCell>
                     <TableCell className="text-right number-font">{formatPrice(order.price)}</TableCell>
                     <TableCell className="text-right number-font">{formatQuantity(order.quantity)}</TableCell>
-                    <TableCell className="text-right number-font">{order.total ? formatCurrency(order.total) : '-'}</TableCell>
-                    <TableCell className="text-right number-font">{formatCurrency(order.value)}</TableCell>
-                    <TableCell className="text-right number-font">{formatPrice(order.fee_amount)}</TableCell>
+                    <TableCell className="text-right number-font">{formatCurrency(order.orderValue)}</TableCell>
+                    <TableCell className="text-right number-font">{formatCurrency(order.filledValue)}</TableCell>
+                    <TableCell className="text-right number-font">{formatFee(order.feeAmount)}</TableCell>
                   </TableRow>
                 ))
               )}
@@ -138,7 +138,7 @@ export default function TradesCard({ userData }: TradesCardProps) {
             </div>
           </div>
           <Table>
-            <TableCaption>Executed Trades ({userData?.executedOrders?.length || 0} orders)</TableCaption>
+            <TableCaption>Executed Trades ({myExecutedOrders?.length} orders)</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Input Date</TableHead>
@@ -152,31 +152,31 @@ export default function TradesCard({ userData }: TradesCardProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {!userData?.executedOrders || userData.executedOrders.length === 0 ? (
+              {!myExecutedOrders || myExecutedOrders.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={8} className="text-center text-[#FAFAFA]/50">
                     No executed orders
                   </TableCell>
                 </TableRow>
               ) : (
-                userData.executedOrders.map((order) => (
+                myExecutedOrders.map((order) => (
                   <TableRow key={order.id}>
-                    <TableCell className="number-font">{formatDate(order.input_date)}</TableCell>
+                    <TableCell className="number-font">{formatDateTime(order.createdAt)}</TableCell>
                     <TableCell>
                       <span className={`capitalize ${order.status === 'completed' ? 'text-[#BFFFC1]' : ''}`}>
                         <CircleCheck strokeWidth="2" className="w-5 h-5" color="#BFFFC1" />
                       </span>
                     </TableCell>
                     <TableCell>
-                      <span className={`capitalize ${order.direction === 'buy' ? 'text-[#DE999A]' : 'text-[#719ED2]'}`}>
-                        {order.direction}
+                      <span className={`capitalize ${order.side === 'buy' ? 'text-[#DE999A]' : 'text-[#719ED2]'}`}>
+                        {order.side}
                       </span>
                     </TableCell>
                     <TableCell className="text-right number-font">{formatPrice(order.price)}</TableCell>
                     <TableCell className="text-right number-font">{formatQuantity(order.quantity)}</TableCell>
-                    <TableCell className="text-right number-font">{order.total ? formatCurrency(order.total) : '-'}</TableCell>
-                    <TableCell className="text-right number-font">{formatCurrency(order.value)}</TableCell>
-                    <TableCell className="text-right number-font">{formatPrice(order.fee_amount)}</TableCell>
+                    <TableCell className="text-right number-font">{formatCurrency(order.orderValue)}</TableCell>
+                    <TableCell className="text-right number-font">{formatCurrency(order.filledValue)}</TableCell>
+                    <TableCell className="text-right number-font">{formatFee(order.feeAmount)}</TableCell>
                   </TableRow>
                 ))
               )}
