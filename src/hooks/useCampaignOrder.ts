@@ -11,6 +11,6 @@ export function useCreateCampaignOrder() {
       side: 'buy' | 'sell';
       order_price: number;
       order_quantity: number;
-    }) => campaignApi.createCampaignOrder(orderData),
+    }) => campaignOrderApi.createCampaignOrder(orderData),
   });
 }

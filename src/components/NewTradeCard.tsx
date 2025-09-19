@@ -42,18 +42,27 @@ export default function NewTradeCard({ campaignId, campaignToken }: NewTradeCard
 
   const { mutate: createOrder, isLoading } = useCreateCampaignOrder();
 
-  const handleSubmit = (side: "buy" | "sell") => {
-    createOrder({
-      campaign_id: campaignId,
+const handleSubmit = (side: "buy" | "sell") => {
+  createOrder(
+    {
+      campaign_id: Number(campaignId),   // number 변환 필요
       exchange: "bithumb",
       symbol: `KRW-${campaignToken}`,
       order_type: orderType,
       side,
       order_price: price,
       order_quantity: quantity,
-    });
-  };
-
+    },
+    {
+      onSuccess: (res) => {
+        console.log("✅ 주문 성공:", res);
+      },
+      onError: (err) => {
+        console.error("❌ 주문 실패:", err);
+      },
+    }
+  );
+};
   return (
     <Card className="dark rounded-[2px] overflow-hidden">
       <CardHeader className="color-[#FAFAFA]">
@@ -105,7 +114,7 @@ export default function NewTradeCard({ campaignId, campaignToken }: NewTradeCard
               />
             </div>
             <Button
-              onClick={handleSubmit("buy")}
+              onClick={() => handleSubmit("buy")}
               variant="outline"
               size="lg"
               className="w-full uppercase number-font"

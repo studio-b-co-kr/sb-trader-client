@@ -195,7 +195,7 @@ export const campaignOrderApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStrage.getItem("access_token")}`,
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
       },
       body: JSON.stringify({ campaign_order: orderData }),
     });
