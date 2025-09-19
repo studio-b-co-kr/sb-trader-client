@@ -76,7 +76,7 @@ export default function TradesPage() {
             <table className="min-w-full bg-black-100 rounded ">
               <thead>
                 <tr>
-                  <th className="px-4 py-2 border-b border-pink-600 text-left font-semibold">ID</th>
+                  <th className="px-4 py-2 border-b border-pink-600 text-right font-semibold">ID</th>
                   <th className="px-4 py-2 border-b border-pink-600 text-left font-semibold">Side</th>
                   <th className="px-4 py-2 border-b border-pink-600 text-right font-semibold">Price</th>
                   <th className="px-4 py-2 border-b border-pink-600 text-right font-semibold">Quantity</th>
