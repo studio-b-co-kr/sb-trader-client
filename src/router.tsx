@@ -13,6 +13,8 @@ import Home from "./pages/Home";
 import CampaignsList from "./pages/CampaignsList";
 import CampaignPage from "./pages/CampaignPage";
 import FoundationNewCampaign from "./pages/FoundationNewCampaign";
+import TradesPage from "./pages/TradesPage";
+import { ConnectButton } from "@mysten/dapp-kit";
 
 // Root layout route
 const RootRoute = createRootRoute({
@@ -23,10 +25,15 @@ const RootRoute = createRootRoute({
     return (
       <div className="h-screen overflow-hidden">
         {!isHomePage && (
-          <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] flex flex-row gap-8 items-center text-sm pl-8 py-4">
-            <Link to="/campaigns">Campaigns</Link>
-            <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
-            {/* <Link to="/">Home</Link> */}
+          <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] py-4 px-4 flex flex-row justify-between items-center">
+            <div className="flex flex-row gap-8 items-center text-sm pl-4">
+              <Link to="/campaigns">Campaigns List</Link>
+              <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
+              <Link to="/trades">Trades</Link>
+            </div>
+            <div> 
+              <ConnectButton />
+            </div>
           </nav>
         )}
         <main style={{ overflow: "auto" }}>
@@ -57,6 +64,18 @@ const FoundationNewCampaignRoute = createRoute({
     return (
       <>
         <FoundationNewCampaign />
+      </>
+    );
+  },
+});
+
+const TradesPageRoute = createRoute({
+  getParentRoute: () => RootRoute,
+  path: "/trades",  // exact root
+  component: function FoundationNewCampaignWrapper() {
+    return (
+      <>
+        <TradesPage />
       </>
     );
   },
@@ -102,6 +121,7 @@ const routeTree = RootRoute.addChildren([
     CampaignPageRoute,
   ]),
   FoundationNewCampaignRoute,
+  TradesPageRoute,
 ]);
 
 // Create router
