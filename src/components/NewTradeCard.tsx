@@ -105,7 +105,7 @@ export default function NewTradeCard({ campaignId, campaignToken }: NewTradeCard
               />
             </div>
             <Button
-              onClick={() => handleSubmit("buy")}
+              onClick={handleSubmit("buy")}
               variant="outline"
               size="lg"
               className="w-full uppercase number-font"
