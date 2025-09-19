@@ -27,7 +27,6 @@ const RootRoute = createRootRoute({
         {!isHomePage && (
           <nav className="border-b border-[#DDDDDD22] text-[#DDDDDD] py-4 px-4 flex flex-row justify-between items-center">
             <div className="flex flex-row gap-8 items-center text-sm pl-4">
-              <Link to="/">Home</Link>
               <Link to="/campaigns">Campaigns List</Link>
               <Link to="/foundation-new-campaign">Foundation New Campaign</Link>
               <Link to="/trades">Trades</Link>
