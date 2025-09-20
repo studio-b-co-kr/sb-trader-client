@@ -89,12 +89,12 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
               <div className="text-lg number-font">
                 {prizePool.toLocaleString()}
-                <span className="support-character pl-[2px]">BLUE</span>
+                <span className="support-character pl-[2px]">SUI</span>
               </div>
             </div>
             <div className="flex flex-col items-start justify-start gap-[2px]">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Token</div>
-              <div className="text-lg number-font">BLUE</div>
+              <div className="text-lg number-font">SUI</div>
             </div>
             <div className="flex flex-col items-start justify-start gap-[2px]">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Exchange</div>
@@ -185,7 +185,7 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
                 <div className="text-normal number-font flex flex-row items-center gap-3">
                   <div className="flex flex-col items-start justify-start gap-0">
                   <div className="text-sm uppercase text-[#FAFAFA]/30">Start Date</div>
-                    <div className="text-normal number-font">Sept 20, 2025</div>
+                    <div className="text-normal number-font">Sept 21, 2025</div>
                     <div className="text-xs number-font opacity-30">12:00PM KST</div>
                   </div>
                   <div>-</div>
@@ -197,7 +197,7 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="text-sm uppercase text-[#FAFAFA]/30">Token</div>
-                  <div className="text-normal number-font">Blue</div>
+                  <div className="text-normal number-font">Sui</div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="text-sm uppercase text-[#FAFAFA]/30">Exchange</div>
@@ -206,8 +206,8 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
                 <div className="flex flex-col gap-1">
                   <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
                   <div className="text-normal number-font">
-                    10,000,000 
-                    <span className="support-character pl-[3px]">KRW</span>
+                    {prizePool} 
+                    <span className="support-character pl-[3px]">SUI</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -219,8 +219,8 @@ export default function FoundationNewCampaign({ campaignId }: FoundationNewCampa
                 <div className="flex flex-col gap-1">
                   <div className="text-sm uppercase text-[#FAFAFA]/30">StudioB Fee</div>
                   <div className="text-normal number-font">
-                    2,000,000
-                    <span className="support-character pl-[3px]">KRW</span>
+                    0.1
+                    <span className="support-character pl-[3px]">SUI</span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-1">

@@ -16,6 +16,7 @@ interface CampaignPageProps {
 }
 
 export default function CampaignPage({ campaignId }: CampaignPageProps) {
+  console.log('>>>>', campaignId)
   const { data: campaign, isLoading: campaignLoading, error: campaignError } = useCampaign(campaignId);
   const { data: mySummaryResponse, isLoading: mySummaryLoading, error: mySummaryError } = useCampaignMySummary(campaignId);
   const { data: myOpenOrders, isLoading: myOpenOrdersLoading, error: myOpenOrdersError } = useCampaignMyOpenOrders(campaignId);
@@ -69,10 +70,10 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
               <span className="lowercase">{campaign.title}</span>
               <span className="text-[#EE82DA] uppercase font-bold">{campaign.tokenSymbol}</span>
             </h1>
-            <div className="flex flex-col gap-1 px-6">
+            {/* <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Current Price</div>
               <div className="text-lg number-font">{campaign.tokenCurrentPrice}</div>
-            </div>
+            </div> */}
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Prize Pool</div>
               <div className="text-lg number-font">{campaign.rewardTotalQuantity}</div>
@@ -84,7 +85,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
           </div>
 
           <Card className="w-full h-[560px] dark rounded-[2px]">
-            <div>
+            {/* <div>
               <div className="text-[#FAFAFA] text-4xl number-font pl-6 mb-2">
                 {campaign.tokenCurrentPrice}
               </div>
@@ -92,7 +93,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
                 <div>{campaign.priceChange}</div>
                 <div>({campaign.priceChangePercent}<span className="support-character">%</span>)</div>
               </div>
-            </div>
+            </div> */}
             {campaign.tokenSymbol && <TradingViewWidget token={campaign.tokenSymbol} />}
           </Card>
           <TradesCard myOpenOrders={myOpenOrders} myExecutedOrders={myExecutedOrders} />
@@ -144,7 +145,7 @@ export default function CampaignPage({ campaignId }: CampaignPageProps) {
             <div className="flex flex-col gap-1 px-6">
               <div className="text-sm uppercase text-[#FAFAFA]/30">Outstanding Orders</div>
               <div className="text-normal number-font">
-                {mySummaryData?.outstandingOrders?.length || 0} orders
+                {myOpenOrders?.length || 0} orders
               </div>
             </div>
             {mySummaryData && mySummaryData.reward_rank && (

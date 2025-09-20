@@ -72,8 +72,13 @@ class ApiError extends Error {
 }
 
 async function apiRequest<T>(endpoint: string): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`);
-
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+    },
+  });
   if (!response.ok) {
     throw new ApiError(response.status, `API request failed: ${response.statusText}`);
   }
@@ -198,7 +203,7 @@ export const campaignOrderApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
+        'Authorization': `Bearer ${localStorage.getItem("access_token")}`,
       },
       body: JSON.stringify({ campaign_order: orderData }),
     });
